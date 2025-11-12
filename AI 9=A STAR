@@ -1,0 +1,104 @@
+from queue import PriorityQueue
+
+# Input the number of edges
+n = int(input("Number of edges: "))
+graph = {}
+nodes = set()
+
+# Build the undirected weighted graph
+for _ in range(n):
+    u, v, cost = input("Edge (u v cost): ").split()
+    cost = float(cost)
+    graph.setdefault(u, []).append((v, cost))
+    graph.setdefault(v, []).append((u, cost))
+    nodes.update([u, v])
+
+# Input heuristic values
+h = {}
+m = int(input("Number of heuristic values: "))
+print("Enter heuristic (node value):")
+for _ in range(m):
+    node, val = input().split()
+    h[node] = float(val)
+
+# Input start and goal nodes
+start = input("Start node: ")
+goal = input("Goal node: ")
+
+# Basic checks
+if start not in nodes:
+    print(f"Start node '{start}' not found in graph.")
+    raise SystemExit
+if goal not in nodes:
+    print(f"Goal node '{goal}' not found in graph.")
+    raise SystemExit
+
+def a_star(graph, start, goal, h, nodes):
+    open_set = PriorityQueue()
+    open_set.put((h.get(start, 0), start))
+    came_from = {}
+    visited = set()
+
+    # Initialize g and f scores using nodes set
+    g_score = {node: float('inf') for node in nodes}
+    g_score[start] = 0.0
+
+    f_score = {node: float('inf') for node in nodes}
+    f_score[start] = h.get(start, 0.0)
+
+    while not open_set.empty():
+        _, current = open_set.get()
+
+        if current in visited:
+            continue
+        visited.add(current)
+
+        if current == goal:
+            # Reconstruct the path
+            path = []
+            cur = current
+            while cur in came_from:
+                path.append(cur)
+                cur = came_from[cur]
+            path.append(start)
+            path = path[::-1]
+            return path, g_score[goal]
+
+        for neighbor, cost in graph.get(current, []):
+            tentative_g = g_score[current] + cost
+            if tentative_g < g_score.get(neighbor, float('inf')):
+                came_from[neighbor] = current
+                g_score[neighbor] = tentative_g
+                f_score[neighbor] = tentative_g + h.get(neighbor, 0.0)
+                open_set.put((f_score[neighbor], neighbor))
+
+    return None, float('inf')
+
+# Run A* algorithm
+path, total_cost = a_star(graph, start, goal, h, nodes)
+
+# Output result
+if path:
+    print("Path:", " -> ".join(path))
+    print("Total cost:", total_cost)
+else:
+    print("No path found")
+-------------------------------------------------------------------------------
+OUTPUT- PYTHON3
+Number of edges: 6
+Edge (u v cost): A B 1
+Edge (u v cost): A C 4
+Edge (u v cost): B C 2
+Edge (u v cost): B D 5
+Edge (u v cost): C D 1
+Edge (u v cost): D E 3
+Number of heuristic values: 5
+Enter heuristic (node value):
+A 7
+B 6
+C 2
+D 1
+E 0
+Start node: A
+Goal node: E
+
