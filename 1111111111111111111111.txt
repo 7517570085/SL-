@@ -1,0 +1,167 @@
+💎 ACID Properties in DBMS
+
+ACID stands for Atomicity, Consistency, Isolation, and Durability.
+These four properties ensure that database transactions are processed reliably — even in cases of errors, power failures, or crashes.
+
+🧩 1. Atomicity (All or Nothing)
+
+A transaction is an indivisible unit of work.
+
+Either all the operations of a transaction are completed successfully, or none are applied.
+
+If any part of the transaction fails, the entire transaction is rolled back to the previous consistent state.
+
+Example:
+Transferring ₹1000 from Account A to Account B:
+
+Deduct ₹1000 from A
+
+Add ₹1000 to B
+
+If step 2 fails (e.g., power failure), step 1 is rolled back so no money is lost.
+
+Mechanism used:
+➡️ Commit (confirm) or Rollback (undo).
+
+⚖️ 2. Consistency
+
+Ensures that the database remains valid before and after a transaction.
+
+Any transaction should transform the database from one consistent state to another.
+
+All constraints, triggers, and rules must be satisfied after a transaction.
+
+Example:
+If a table has a constraint balance >= 0,
+a transaction should never result in a negative balance.
+
+If it tries to do so, the transaction fails and is rolled back to maintain consistency.
+
+🔒 3. Isolation
+
+Ensures that concurrent transactions (executing at the same time) do not interfere with each other.
+
+Each transaction should behave as if it’s the only one running in the system.
+
+Example:
+If two users try to update the same account at the same time,
+one transaction’s intermediate changes should not be visible to the other until it is committed.
+
+Levels of Isolation:
+
+Read Uncommitted – Can see uncommitted changes (dirty reads).
+
+Read Committed – Can only see committed data.
+
+Repeatable Read – Ensures same data is read multiple times.
+
+Serializable – Highest isolation, transactions execute one after another.
+
+💾 4. Durability
+
+Once a transaction is committed, its results are permanent, even if the system fails.
+
+Data is saved to non-volatile memory (disk) after commit.
+
+Ensures data survives crashes, power loss, or system errors.
+
+Example:
+If money transfer succeeds and system crashes right after,
+the transaction remains recorded when the system restarts.
+
+Mechanism used:
+➡️ Transaction logs, backups, and checkpoints.
+----------------------------------------------------------------------------------------------------------
+1. What is SQL?
+
+SQL (Structured Query Language) is a language used to store, manipulate, and retrieve data from relational databases.
+-------------------------------------------------------------------------------------------------------------------
+🔑 4. Primary Key
+
+A column (or set) that uniquely identifies each row.
+➡️ No NULL, no duplicate.
+
+🌐 5. Foreign Key
+
+A column that refers to the primary key of another table to link them.
+
+🧭 6. UNIQUE Key
+
+Ensures all values in a column are unique (can have one NULL).
+---------------------------------------------------------------------------------------------------------------------------
+Normalization
+
+Process of organizing data to reduce redundancy and improve data integrity.
+Types:
+1NF → Atomic values
+2NF → No partial dependency
+3NF → No transitive dependency
+BCNF → Stronger form of 3NF
+------------------------------------------------------------------------------------------------
+Join Operations
+
+Used to combine rows from multiple tables based on related columns.
+
+INNER JOIN → Matching rows only
+
+LEFT JOIN → All from left + matching from right
+
+RIGHT JOIN → All from right + matching from left
+
+FULL JOIN → All rows from both tables
+
+CROSS JOIN → Cartesian product
+------------------------------------------------------------------------------------------------------------------
+Index
+
+Used to speed up data retrieval.
+
+Types:
+
+Clustered Index → Data stored in order of index (only one per table).
+
+Non-Clustered Index → Separate structure from data (can have many).
+
+Unique Index → Prevents duplicate values.
+
+Composite Index → On multiple columns.
+-----------------------------------------------------------------------------------------------------------------
+What is a Trigger?
+
+A trigger is a stored program in a database that automatically executes (fires) when a specific event occurs on a table.
+
+Events:
+
+INSERT
+
+UPDATE
+
+DELETE
+
+Used for:
+
+Maintaining audit logs
+
+Enforcing business rules
+
+Automatic calculations
+
+Preventing invalid operations
+
+Example:
+A trigger that automatically updates the last_modified column whenever a row is updated.
+-----------------------------------------------------------------------------------
+
+🪟 What is a View?
+
+A view is a virtual table created from a SQL query.
+It does not store data physically; it only displays data from one or more tables.
+
+Used for:
+
+Simplifying complex queries
+
+Providing security (hide specific columns)
+
+Presenting customized data to users
+
